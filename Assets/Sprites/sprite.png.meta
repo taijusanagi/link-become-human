@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -134,7 +134,217 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Egg
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 1291
+        width: 234
+        height: 200
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 683de2fd2df4c4cb5bb822a2bd8cced9
+      internalID: -717326498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Baby_Face
+      rect:
+        serializedVersion: 2
+        x: 446
+        y: 1293
+        width: 233
+        height: 202
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69e94c0911aa14d259298e66b4d3d90a
+      internalID: 2015219989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Baby_Body
+      rect:
+        serializedVersion: 2
+        x: 783
+        y: 1297
+        width: 161
+        height: 143
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e17a38e1e2bcf4667a50148e548e98f7
+      internalID: 2013654950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Baby_Leg_Joint
+      rect:
+        serializedVersion: 2
+        x: 1047
+        y: 1302
+        width: 158
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4058837471f884e3bafb5b34c575be63
+      internalID: -1704456800
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Baby_Leg
+      rect:
+        serializedVersion: 2
+        x: 1244
+        y: 1284
+        width: 378
+        height: 122
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c322f3526f8145c8a6cfab7bf34f02e
+      internalID: -1103601339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Baby_Hand
+      rect:
+        serializedVersion: 2
+        x: 1722
+        y: 1289
+        width: 316
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9028c97e2ed874d2ab7d973dec31a055
+      internalID: -1725524077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Baby_Whole_Body
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 627
+        width: 373
+        height: 391
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67d796644ade24729a06f000d147cdd5
+      internalID: -204666782
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Adult_Face
+      rect:
+        serializedVersion: 2
+        x: 471
+        y: 751
+        width: 258
+        height: 254
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2f9ca5d1e9744521a448dea4e78b4c4
+      internalID: -360540794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Adult_Whole_Body
+      rect:
+        serializedVersion: 2
+        x: 804
+        y: 606
+        width: 385
+        height: 445
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d500b81782fcc4747a3956c33da1d4e3
+      internalID: 1129542497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect
+      rect:
+        serializedVersion: 2
+        x: 1282
+        y: 518
+        width: 496
+        height: 699
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 559ad1dce0f944fe7bea7f0a885c85a8
+      internalID: 1222879388
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -145,7 +355,17 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Adult_Face: -360540794
+      Adult_Whole_Body: 1129542497
+      Baby_Body: 2013654950
+      Baby_Face: 2015219989
+      Baby_Hand: -1725524077
+      Baby_Leg: -1103601339
+      Baby_Leg_Joint: -1704456800
+      Baby_Whole_Body: -204666782
+      Effect: 1222879388
+      Egg: -717326498
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
