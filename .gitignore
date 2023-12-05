@@ -72,5 +72,7 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # Local
-.DS_Store
+.temp
 .vercel
+.DS_Store
+
