@@ -5,6 +5,9 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
+// TODO: make it sbt
+// TODO; use address for key
+
 contract LinkBecomeHuman is ERC721 {
     constructor() ERC721("LinkBecomeHuman", "LBH") {}
 
@@ -14,7 +17,7 @@ contract LinkBecomeHuman is ERC721 {
     }
 
     function getTokenIdByAddress(address _address) public view returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(msg.sender)));
+        return uint256(keccak256(abi.encodePacked(_address)));
     }
 
     function getMetaData(uint256 _tokenId) public view returns (string memory) {
