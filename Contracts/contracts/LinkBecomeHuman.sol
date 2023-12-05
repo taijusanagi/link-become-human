@@ -20,10 +20,10 @@ contract LinkBecomeHuman is ERC721 {
     function getMetaData(uint256 _tokenId) public view returns (string memory) {
         require(_exists(_tokenId), "query for nonexistent token");
 
-        string memory name = "LinkBecomeHuman";
-        string memory description = "This is LinkBecomeHuman";
+        string memory name = "Link:BecomeHuman";
+        string memory description = "This is Link:BecomeHuman NFT";
         string memory image = "https://placehold.jp/500x500.png";
-        string memory animationURL = "https://link-become-human.vercel.app/";
+        string memory animationURL = "https://link-become-human.vercel.app/game/index.html";
 
         return
             string(

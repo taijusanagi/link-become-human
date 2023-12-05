@@ -1,10 +1,5 @@
 import { ethers, network } from "hardhat";
 
-async function increaseTime(duration: number) {
-  await network.provider.send("evm_increaseTime", [duration]);
-  await network.provider.send("evm_mine"); // this is necessary to apply the time increase
-}
-
 describe("LinkBecomeHuman", function () {
   describe("Test", function () {
     const fixture = async () => {
