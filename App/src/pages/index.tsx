@@ -42,8 +42,8 @@ export default function Home() {
         {!isConnected && (
           <div className="flex justify-center">
             <div className="my-52 text-center">
-              <img className="h-12 mx-auto" src="assets/icon.png" />
-              <h1 className="text-4xl md:text-7xl mb-4">Link:BecomeHuman</h1>
+              <img className="h-12 mx-auto animate-[up-and-down_1s_ease-in-out_infinite]" src="assets/icon.png" />
+              <h1 className="text-4xl md:text-7xl mb-4 flashing-text">Link:BecomeHuman</h1>
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 onClick={openConnectModal}

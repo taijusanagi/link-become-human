@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes up-and-down {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes highlight {
+  0% {
+    background-position: -500%;
+  }
+  100% {
+    background-position: 500%;
+  }
+}
+
+.flashing-text {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.8) 45%,
+    rgba(0, 0, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0.8) 55%
+  );
+  background-size: 200%;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: highlight 10s linear infinite;
+}
