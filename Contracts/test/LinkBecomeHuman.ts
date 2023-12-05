@@ -1,4 +1,5 @@
 import { ethers, network } from "hardhat";
+import { expect } from "chai";
 
 describe("LinkBecomeHuman", function () {
   describe("Test", function () {
@@ -12,8 +13,6 @@ describe("LinkBecomeHuman", function () {
 
     it("integration", async function () {
       const { linkBecomeHuman, owner } = await fixture();
-      const testTokenId = await linkBecomeHuman.getTokenIdByAddress("0x3dAf2eAE4Fe3232Ed8a29c5e1be6eEba81C1CFD6");
-      console.log("test", testTokenId.toString());
 
       const tokenId = await linkBecomeHuman.getTokenIdByAddress(owner.address);
       await linkBecomeHuman.connect(owner).mint();
@@ -22,6 +21,9 @@ describe("LinkBecomeHuman", function () {
       JSON.parse(metaData);
       const tokenURI = await linkBecomeHuman.tokenURI(tokenId);
       console.log("tokenURI", tokenURI);
+      await expect(
+        linkBecomeHuman.transferFrom(owner.address, ethers.Wallet.createRandom().address, tokenId)
+      ).to.be.revertedWith("non transferable");
     });
   });
 });

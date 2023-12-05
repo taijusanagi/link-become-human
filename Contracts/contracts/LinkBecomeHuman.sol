@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/utils/Base64.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
 // TODO: make it sbt
-// TODO; use address for key
 
 contract LinkBecomeHuman is ERC721 {
     constructor() ERC721("LinkBecomeHuman", "LBH") {}
@@ -60,5 +59,16 @@ contract LinkBecomeHuman is ERC721 {
                 )
             )
         );
+    }
+
+    // This is address bounding token, so it is not transferable
+    function _beforeTokenTransfer(
+        address from, 
+        address to, 
+        uint256 tokenId,
+        uint256 batchSize
+    ) internal override virtual {
+        require(from == address(0), "non transferable");   
+        super._beforeTokenTransfer(from, to, tokenId, batchSize);  
     }
 }
