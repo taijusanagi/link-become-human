@@ -21,3 +21,7 @@ TBD
 ## ENS Integration
 
 TBD
+
+## The Graph Integration
+
+TBD
