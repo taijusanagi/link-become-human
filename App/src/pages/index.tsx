@@ -29,7 +29,9 @@ export default function Home() {
       return;
     }
     contract.getTokenIdByAddress(userAddress).then((tokenId: ethers.BigNumber) => {
-      setTokenId(tokenId.toString());
+      const _tokenId = tokenId.toString();
+      setTokenId(_tokenId);
+      console.log("tokenId", _tokenId);
     });
   }, [userAddress, contract]);
 
@@ -44,17 +46,20 @@ export default function Home() {
         .then(() => {
           console.log("token minted");
           setIsMinted(true);
-          contract.seeds(tokenId).then((seed: ethers.BigNumber) => {
-            const _seed = seed.toString();
-            console.log("token seed", _seed);
-            if (_seed != "0") {
-              setSeed(_seed);
-            }
-          });
         })
         .catch(() => {
           console.log("token not yet minted");
         });
+      contract.seeds(tokenId).then((seed: ethers.BigNumber) => {
+        const _seed = seed.toString();
+        console.log("token seed", _seed);
+        setSeed(_seed);
+      });
+      contract.humanityScores(tokenId).then((humanityScore: ethers.BigNumber) => {
+        const _humanityScore = humanityScore.toString();
+        console.log("token humanity score", _humanityScore);
+        setSeed(_humanityScore);
+      });
     };
     intervalFunction();
     const intervalId = setInterval(intervalFunction, 5000);
@@ -133,8 +138,12 @@ export default function Home() {
               <div className="flex justify-center space-x-2">
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={() => {
-                    setIsModalOpen(true);
+                  onClick={async () => {
+                    if (!contract) {
+                      return;
+                    }
+                    const subscriptionId = 1689;
+                    await contract.sendRequest(subscriptionId, tokenId);
                   }}
                 >
                   Update Humanity Score
