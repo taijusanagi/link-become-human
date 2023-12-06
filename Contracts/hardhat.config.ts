@@ -10,6 +10,10 @@ const config: HardhatUserConfig = {
       url: "https://rpc.ankr.com/eth_goerli",
       accounts,
     },
+    mumbai: {
+      url: "https://rpc.ankr.com/polygon_mumbai",
+      accounts,
+    },
   },
 };
 

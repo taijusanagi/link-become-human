@@ -32,6 +32,27 @@ export default function Home() {
     });
   }, [userAddress, contract]);
 
+  useEffect(() => {
+    if (!contract || !tokenId) {
+      return;
+    }
+    const intervalFunction = () => {
+      contract
+        .ownerOf(tokenId)
+        .then(() => {
+          setIsMinted(true);
+        })
+        .catch(() => {
+          console.log("not yet minted");
+        });
+    };
+    intervalFunction();
+    const intervalId = setInterval(intervalFunction, 5000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [contract, tokenId]);
+
   return (
     <div className={`flex flex-col min-h-screen bg-gradient-to-r from-black to-gray-800 text-white ${vt323.className}`}>
       <main className="flex-grow">
@@ -78,7 +99,7 @@ export default function Home() {
                     </>
                   )}
                 </div>
-                <iframe width="500" height="500" src={`/game/index.html?tokenId=${tokenId}`}></iframe>
+                <iframe width="504" height="504" src={`/game/index.html?tokenId=${tokenId}`}></iframe>
               </div>
             </div>
 
@@ -86,8 +107,11 @@ export default function Home() {
               <div className="flex justify-center">
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={() => {
-                    setIsMinted(true);
+                  onClick={async () => {
+                    if (!contract) {
+                      return;
+                    }
+                    await contract.mint();
                   }}
                 >
                   Claim Your Humanity NFT

@@ -1,4 +1,4 @@
 import LinkBecomeHumanArtifact from "./artifacts/LinkBecomeHuman.json";
 
 export const abi = LinkBecomeHumanArtifact.abi;
-export const address = "0x8F25132aa7658D583EA022f70D7A1EB52b09c6bb";
+export const address = "0xb20EEB925BB8cAA5d623465C94abF1A2d2269125";

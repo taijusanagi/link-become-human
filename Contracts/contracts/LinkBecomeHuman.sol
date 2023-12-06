@@ -5,10 +5,11 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-// TODO: make it sbt
-
 contract LinkBecomeHuman is ERC721 {
-    constructor() ERC721("LinkBecomeHuman", "LBH") {}
+
+    mapping(uint256 => uint256) public seeds;
+
+    constructor() ERC721("Link:BecomeHuman", "LBH") {}
 
     function mint() public {
         uint256 tokenId = getTokenIdByAddress(msg.sender);
