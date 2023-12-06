@@ -65,11 +65,11 @@ contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, Confirme
     mapping(uint256 => bool) public isUpkeepNeeded;  
     uint256 public lastUpdate;
 
-    constructor(uint64 subscriptionId, uint64 _func_subscriptionId) 
+    constructor(uint64 subscriptionId, uint64 _func_subscriptionId, address ccipRouter) 
         ERC721("Link:BecomeHuman", "LBH") 
         VRFConsumerBaseV2(vrfCoordinator) 
         FunctionsClient(router) 
-        ConfirmedOwner(msg.sender) 
+        ConfirmedOwner(msg.sender)
     {
         COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator);
         s_subscriptionId = subscriptionId;
@@ -156,14 +156,13 @@ contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, Confirme
         returns (bool upkeepNeeded, bytes memory)
     {
         upkeepNeeded = false;
-        if(lastUpdate < block.timestamp - 5 minutes) {
-            return;
-        }
-        for (uint256 i = 0; i < mintedTokenId.length; i++) {
-            uint256 tokenId = mintedTokenId[i];
-            if(isUpkeepNeeded[tokenId]) {
-                upkeepNeeded = true;
-                break;
+        if(block.timestamp > lastUpdate + 5 minutes) {
+            for (uint256 i = 0; i < mintedTokenId.length; i++) {
+                uint256 tokenId = mintedTokenId[i];
+                if(isUpkeepNeeded[tokenId]) {
+                    upkeepNeeded = true;
+                    break;
+                }
             }
         }
     }
@@ -244,4 +243,5 @@ contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, Confirme
         require(from == address(0), "non transferable");   
         super._beforeTokenTransfer(from, to, tokenId, batchSize);  
     }
+
 }
