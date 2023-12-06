@@ -18,6 +18,7 @@ export default function Home() {
   const [modalText, setModalText] = useState("Modal Text");
   const [tokenId, setTokenId] = useState("");
   const [seed, setSeed] = useState("");
+  const [isUpkeepNeeded, setIsUpkeepNeeded] = useState(false);
 
   const { openConnectModal } = useConnectModal();
   const { isConnected } = useIsConnected();
@@ -59,6 +60,10 @@ export default function Home() {
         const _humanityScore = humanityScore.toString();
         console.log("token humanity score", _humanityScore);
         setSeed(_humanityScore);
+      });
+      contract.isUpkeepNeeded(tokenId).then((isUpkeepNeeded: boolean) => {
+        console.log("isUpkeepNeeded", isUpkeepNeeded);
+        setIsUpkeepNeeded(isUpkeepNeeded);
       });
     };
     intervalFunction();
@@ -142,44 +147,48 @@ export default function Home() {
                     if (!contract) {
                       return;
                     }
-                    await contract.sendRequest(tokenId);
-                  }}
-                >
-                  Update
-                </button>
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={async () => {
-                    if (!contract) {
-                      return;
-                    }
-                    await contract.setUpkeep(tokenId, true);
-                  }}
-                >
-                  Start Automate
-                </button>
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={async () => {
-                    if (!contract) {
-                      return;
-                    }
-                    await contract.setUpkeep(tokenId, false);
-                  }}
-                >
-                  Stop Automate
-                </button>
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={async () => {
-                    if (!contract) {
-                      return;
-                    }
                     await contract.requestRandomness(tokenId);
                   }}
                 >
-                  Randomize
+                  Randomize Seed
                 </button>
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={async () => {
+                    if (!contract) {
+                      return;
+                    }
+                    await contract.sendRequest(tokenId);
+                  }}
+                >
+                  Update Humanity
+                </button>
+                {!isUpkeepNeeded && (
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={async () => {
+                      if (!contract) {
+                        return;
+                      }
+                      await contract.setUpkeep(tokenId, true);
+                    }}
+                  >
+                    Start Automate
+                  </button>
+                )}
+                {isUpkeepNeeded && (
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={async () => {
+                      if (!contract) {
+                        return;
+                      }
+                      await contract.setUpkeep(tokenId, false);
+                    }}
+                  >
+                    Stop Automate
+                  </button>
+                )}
               </div>
             )}
           </div>
