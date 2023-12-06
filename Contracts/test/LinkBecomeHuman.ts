@@ -3,11 +3,12 @@ import { expect } from "chai";
 
 describe("LinkBecomeHuman", function () {
   const subscriptionId = 0;
+  const subscriptionId_2 = 0;
   describe("Test", function () {
     const fixture = async () => {
       const [owner] = await ethers.getSigners();
       const LinkBecomeHuman = await ethers.getContractFactory("LinkBecomeHuman");
-      const linkBecomeHuman = await LinkBecomeHuman.deploy(subscriptionId);
+      const linkBecomeHuman = await LinkBecomeHuman.deploy(subscriptionId, subscriptionId_2);
       await linkBecomeHuman.deployed();
       return { linkBecomeHuman, owner };
     };

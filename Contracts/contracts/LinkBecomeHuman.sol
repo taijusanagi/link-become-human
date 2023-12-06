@@ -12,7 +12,9 @@ import {FunctionsClient} from "@chainlink/contracts/src/v0.8/functions/dev/v1_0_
 import {ConfirmedOwner} from "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol";
 import {FunctionsRequest} from "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/libraries/FunctionsRequest.sol";
 
-contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, ConfirmedOwner {
+import "@chainlink/contracts/src/v0.8/automation/AutomationCompatible.sol";
+
+contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, ConfirmedOwner, AutomationCompatible {
     using FunctionsRequest for FunctionsRequest.Request;
 
     /*
@@ -36,6 +38,7 @@ contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, Confirme
      * https://docs.chain.link/chainlink-functions/supported-networks
      * Configured for Avalanche Fuji Testnet
     */
+    uint64 private func_subscriptionId;
     address router = 0xA9d587a00A31A52Ed70D6026794a8FC5E2F5dCb0;
     uint32 gasLimit = 300000;
     bytes32 donID =
@@ -55,7 +58,14 @@ contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, Confirme
         "const { data } = apiResponse;"
         "return Functions.encodeString(data.toString());";
 
-    constructor(uint64 subscriptionId) 
+    /*
+     * Chainlink Automation states
+    */  
+    uint256[] public mintedTokenId;    
+    mapping(uint256 => bool) public isUpkeepNeeded;  
+    uint256 public lastUpdate;
+
+    constructor(uint64 subscriptionId, uint64 _func_subscriptionId) 
         ERC721("Link:BecomeHuman", "LBH") 
         VRFConsumerBaseV2(vrfCoordinator) 
         FunctionsClient(router) 
@@ -63,6 +73,7 @@ contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, Confirme
     {
         COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator);
         s_subscriptionId = subscriptionId;
+        func_subscriptionId = _func_subscriptionId;
     }
 
     /*
@@ -91,12 +102,12 @@ contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, Confirme
      * Chainlink Function implementation
     */
 
+    // this should be token owner function or have payment
     function sendRequest(
-        uint64 subscriptionId,
         uint256 tokenId
-    ) external  {
-        address owner = ownerOf(tokenId);
-        require(owner == msg.sender, "not token owner");        
+    ) public {
+        address owner = ownerOf(tokenId);   
+        require(owner == msg.sender || address(this) == msg.sender, "not token owner or contract");
         FunctionsRequest.Request memory req;
         req.initializeRequestForInlineJavaScript(source);
         string[] memory args = new string[](1);
@@ -104,7 +115,7 @@ contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, Confirme
         req.setArgs(args);
         bytes32 requestId = _sendRequest(
             req.encodeCBOR(),
-            subscriptionId,
+            func_subscriptionId,
             gasLimit,
             donID
         );
@@ -123,11 +134,58 @@ contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, Confirme
     }
 
     /*
+     * Chainlink Automation implementation
+    */
+
+    // this should get payment from token owner and manage expiration for production
+    function setUpkeep(
+        uint256 tokenId,
+        bool status
+    ) public {
+        address owner = ownerOf(tokenId);   
+        require(owner == msg.sender, "not token owner");
+        isUpkeepNeeded[tokenId] = status;
+    }
+
+    function checkUpkeep(
+        bytes calldata
+    )
+        external
+        view
+        override
+        returns (bool upkeepNeeded, bytes memory)
+    {
+        upkeepNeeded = false;
+        if(lastUpdate < block.timestamp - 5 minutes) {
+            return;
+        }
+        for (uint256 i = 0; i < mintedTokenId.length; i++) {
+            uint256 tokenId = mintedTokenId[i];
+            if(isUpkeepNeeded[tokenId]) {
+                upkeepNeeded = true;
+                break;
+            }
+        }
+    }
+
+    // this should take care the gas limit
+    function performUpkeep(bytes calldata) external override {
+        for (uint256 i = 0; i < mintedTokenId.length; i++) {
+            uint256 tokenId = mintedTokenId[i];
+            if(isUpkeepNeeded[tokenId]) {
+                this.sendRequest(tokenId);
+            }
+        }
+        lastUpdate = block.timestamp;
+    }
+
+    /*
      * NFT Implementation
     */
     function mint() public {
         uint256 tokenId = getTokenIdByAddress(msg.sender);
         _mint(msg.sender, tokenId);
+        mintedTokenId.push(tokenId);
     }
 
     function getTokenIdByAddress(address _address) public view returns (uint256) {

@@ -142,11 +142,32 @@ export default function Home() {
                     if (!contract) {
                       return;
                     }
-                    const subscriptionId = 1689;
-                    await contract.sendRequest(subscriptionId, tokenId);
+                    await contract.sendRequest(tokenId);
                   }}
                 >
-                  Update Humanity Score
+                  Update
+                </button>
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={async () => {
+                    if (!contract) {
+                      return;
+                    }
+                    await contract.setUpkeep(tokenId, true);
+                  }}
+                >
+                  Start Automate
+                </button>
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={async () => {
+                    if (!contract) {
+                      return;
+                    }
+                    await contract.setUpkeep(tokenId, false);
+                  }}
+                >
+                  Stop Automate
                 </button>
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
