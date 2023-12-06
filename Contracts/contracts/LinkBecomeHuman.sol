@@ -16,6 +16,22 @@ contract LinkBecomeHuman is ERC721 {
         _mint(msg.sender, tokenId);
     }
 
+    // request Chainnlink VRF to get random value
+    // function requestRandomness(uint256 _tokenId) public {}
+
+    // request Chainnlink function to get Gitcoin Passport humanity score
+    // function requestHumanityScore(uint256 _tokenId) public {})
+
+    // accept random value from Chainnlink VRF
+    // function fulfillRandomness(uint256 _randomness) internal override {}
+
+    // accept Gitcoin Passport humanity score from Chainnlink function
+    // function setSeed(uint256 _tokenId, uint256 _seed) public {
+    //     require(_exists(_tokenId), "query for nonexistent token");
+    //     require(ownerOf(_tokenId) == msg.sender, "not owner");
+    //     seeds[_tokenId] = _seed;
+    // }
+
     function getTokenIdByAddress(address _address) public view returns (uint256) {
         return uint256(keccak256(abi.encodePacked(_address)));
     }

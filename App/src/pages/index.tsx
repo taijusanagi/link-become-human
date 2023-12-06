@@ -89,7 +89,7 @@ export default function Home() {
                       <p>|</p>
                       <p>
                         <a
-                          href={`https://testnets.opensea.io/assets/goerli/${contractAddress}/${tokenId}`}
+                          href={`https://testnets.opensea.io/assets/mumbai/${contractAddress}/${tokenId}`}
                           target="_blank"
                           className="text-blue-500 hover:underline"
                         >
@@ -127,10 +127,10 @@ export default function Home() {
                     setIsModalOpen(true);
                   }}
                 >
-                  Update Your Humanity NFT
+                  Update Humanity Score
                 </button>
                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                  Automate Update by Chainlink Automation
+                  Randomize
                 </button>
               </div>
             )}
