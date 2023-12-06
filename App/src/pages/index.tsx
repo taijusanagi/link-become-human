@@ -147,17 +147,6 @@ export default function Home() {
                     if (!contract) {
                       return;
                     }
-                    await contract.requestRandomness(tokenId);
-                  }}
-                >
-                  Randomize Seed
-                </button>
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={async () => {
-                    if (!contract) {
-                      return;
-                    }
                     await contract.sendRequest(tokenId);
                   }}
                 >
@@ -189,6 +178,17 @@ export default function Home() {
                     Stop Automate
                   </button>
                 )}
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={async () => {
+                    if (!contract) {
+                      return;
+                    }
+                    await contract.requestRandomness(tokenId);
+                  }}
+                >
+                  Randomize Seed
+                </button>
               </div>
             )}
           </div>

@@ -65,7 +65,7 @@ contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, Confirme
     mapping(uint256 => bool) public isUpkeepNeeded;  
     uint256 public lastUpdate;
 
-    constructor(uint64 subscriptionId, uint64 _func_subscriptionId, address ccipRouter) 
+    constructor(uint64 subscriptionId, uint64 _func_subscriptionId) 
         ERC721("Link:BecomeHuman", "LBH") 
         VRFConsumerBaseV2(vrfCoordinator) 
         FunctionsClient(router) 
@@ -79,6 +79,7 @@ contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, Confirme
     /*
      * Chainlink VRF implementation
     */
+
     function requestRandomness(uint256 _tokenId) public {
         require(ownerOf(_tokenId) == msg.sender, "not token owner");
         uint256 requestId = COORDINATOR.requestRandomWords(
@@ -102,7 +103,6 @@ contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, Confirme
      * Chainlink Function implementation
     */
 
-    // this should be token owner function or have payment
     function sendRequest(
         uint256 tokenId
     ) public {
@@ -137,7 +137,6 @@ contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, Confirme
      * Chainlink Automation implementation
     */
 
-    // this should get payment from token owner and manage expiration for production
     function setUpkeep(
         uint256 tokenId,
         bool status
@@ -167,7 +166,7 @@ contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, Confirme
         }
     }
 
-    // this should take care the gas limit
+    // this should take care the gas optimazation
     function performUpkeep(bytes calldata) external override {
         for (uint256 i = 0; i < mintedTokenId.length; i++) {
             uint256 tokenId = mintedTokenId[i];
