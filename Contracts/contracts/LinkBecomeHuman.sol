@@ -13,6 +13,7 @@ import {ConfirmedOwner} from "@chainlink/contracts/src/v0.8/shared/access/Confir
 import {FunctionsRequest} from "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/libraries/FunctionsRequest.sol";
 
 contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, ConfirmedOwner {
+    using FunctionsRequest for FunctionsRequest.Request;
 
     /*
      * Chainlink VRF states
@@ -40,20 +41,19 @@ contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, Confirme
     bytes32 donID =
         0x66756e2d6176616c616e6368652d66756a692d31000000000000000000000000;
     string public character;
-    mapping(uint256 => uint256) public functionRequestIdToTokenId;
-    mapping(uint256 => uint256) public humanityScores;
-    event humanityScoreUpdated(uint256 indexed tokenId, uint256 humanityScore);
+    mapping(bytes32 => uint256) public functionRequestIdToTokenId;
+    mapping(uint256 => string) public humanityScores;
+    event HumanityScoreUpdated(uint256 indexed tokenId, string humanityScore);
     string source =
-        "const characterId = args[0];"
+        "const address = args[0];"
         "const apiResponse = await Functions.makeHttpRequest({"
-        "url: `https://swapi.dev/api/people/${characterId}/`"
+        "url: `https://link-become-human.vercel.app/api/humanity/${address}`"
         "});"
         "if (apiResponse.error) {"
         "throw Error('Request failed');"
         "}"
         "const { data } = apiResponse;"
-        "return Functions.encodeString(data.name);";
-
+        "return Functions.encodeString(data.toString());";
 
     constructor(uint64 subscriptionId) 
         ERC721("Link:BecomeHuman", "LBH") 
@@ -95,11 +95,14 @@ contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, Confirme
         uint64 subscriptionId,
         uint256 tokenId
     ) external  {
-        require(ownerOf(_tokenId) == msg.sender, "not token owner");        
+        address owner = ownerOf(tokenId);
+        require(owner == msg.sender, "not token owner");        
         FunctionsRequest.Request memory req;
         req.initializeRequestForInlineJavaScript(source);
+        string[] memory args = new string[](1);
+        args[0] = Strings.toHexString(owner);
         req.setArgs(args);
-        uint256 requestId = _sendRequest(
+        bytes32 requestId = _sendRequest(
             req.encodeCBOR(),
             subscriptionId,
             gasLimit,
@@ -113,10 +116,10 @@ contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, Confirme
         bytes memory response,
         bytes memory err
     ) internal override {
-        uint256 tokenId = functionRequestIdToTokenId[uint256(requestId)];
-        uint256 humanityScore = uint256(response);
+        uint256 tokenId = functionRequestIdToTokenId[requestId];
+        string memory humanityScore = string(response);
         humanityScores[tokenId] = humanityScore;
-        humanityScoreUpdated(tokenId, humanityScore);
+        emit HumanityScoreUpdated(tokenId, humanityScore);
     }
 
     /*
@@ -128,7 +131,7 @@ contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2, FunctionsClient, Confirme
     }
 
     function getTokenIdByAddress(address _address) public view returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(_address)));
+        return uint256(uint160(_address));
     }
 
     function getMetaData(uint256 _tokenId) public view returns (string memory) {
