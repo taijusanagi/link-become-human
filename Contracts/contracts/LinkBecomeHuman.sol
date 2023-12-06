@@ -5,19 +5,52 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract LinkBecomeHuman is ERC721 {
+import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
+import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
 
+contract LinkBecomeHuman is ERC721, VRFConsumerBaseV2 {
+
+    uint64 private s_subscriptionId;
+    VRFCoordinatorV2Interface private COORDINATOR;
+    address private vrfCoordinator = 0x2eD832Ba664535e5886b75D64C46EB9a228C2610;
+    bytes32 private s_keyHash = 0x354d2f95da55398f44b7cff77da56283d9c6c829a4bdf1bbcaf2ad6a4d081f61;
+    uint32 private callbackGasLimit = 40000;
+    uint16 private requestConfirmations = 3;
+    uint32 private numWords =  1;
+
+    mapping(uint256 => uint256) public requestIdToTokenId;
     mapping(uint256 => uint256) public seeds;
 
-    constructor() ERC721("Link:BecomeHuman", "LBH") {}
+    event SeedUpdated(uint256 indexed tokenId, uint256 seed);
+
+    constructor(uint64 subscriptionId) ERC721("Link:BecomeHuman", "LBH") VRFConsumerBaseV2(vrfCoordinator) {
+        COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator);
+        s_subscriptionId = subscriptionId;
+    }
 
     function mint() public {
         uint256 tokenId = getTokenIdByAddress(msg.sender);
         _mint(msg.sender, tokenId);
     }
 
-    // request Chainnlink VRF to get random value
-    // function requestRandomness(uint256 _tokenId) public {}
+    function requestRandomness(uint256 _tokenId) public {
+        require(ownerOf(_tokenId) == msg.sender, "not token owner");
+        uint256 requestId = COORDINATOR.requestRandomWords(
+            s_keyHash,
+            s_subscriptionId,
+            requestConfirmations,
+            callbackGasLimit,
+            numWords
+       );
+       requestIdToTokenId[requestId] = _tokenId;
+    }
+
+    function fulfillRandomWords(uint256 requestId, uint256[] memory randomValues) internal override {
+        uint256 tokenId = requestIdToTokenId[requestId];
+        uint256 randomValue = randomValues[0];
+        seeds[tokenId] = randomValue;
+        emit SeedUpdated(tokenId, randomValue);
+    }
 
     // request Chainnlink function to get Gitcoin Passport humanity score
     // function requestHumanityScore(uint256 _tokenId) public {})

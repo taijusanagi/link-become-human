@@ -17,6 +17,7 @@ export default function Home() {
   const [modalTitle, setModalTitle] = useState("Modal Title");
   const [modalText, setModalText] = useState("Modal Text");
   const [tokenId, setTokenId] = useState("");
+  const [seed, setSeed] = useState("");
 
   const { openConnectModal } = useConnectModal();
   const { isConnected } = useIsConnected();
@@ -37,13 +38,22 @@ export default function Home() {
       return;
     }
     const intervalFunction = () => {
+      console.log("interval check");
       contract
         .ownerOf(tokenId)
         .then(() => {
+          console.log("token minted");
           setIsMinted(true);
+          contract.seeds(tokenId).then((seed: ethers.BigNumber) => {
+            const _seed = seed.toString();
+            console.log("token seed", _seed);
+            if (_seed != "0") {
+              setSeed(_seed);
+            }
+          });
         })
         .catch(() => {
-          console.log("not yet minted");
+          console.log("token not yet minted");
         });
     };
     intervalFunction();
@@ -89,7 +99,7 @@ export default function Home() {
                       <p>|</p>
                       <p>
                         <a
-                          href={`https://testnets.opensea.io/assets/mumbai/${contractAddress}/${tokenId}`}
+                          href={`https://testnets.opensea.io/assets/avalanche-fuji/${contractAddress}/${tokenId}`}
                           target="_blank"
                           className="text-blue-500 hover:underline"
                         >
@@ -129,7 +139,15 @@ export default function Home() {
                 >
                   Update Humanity Score
                 </button>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={async () => {
+                    if (!contract) {
+                      return;
+                    }
+                    await contract.requestRandomness(tokenId);
+                  }}
+                >
                   Randomize
                 </button>
               </div>

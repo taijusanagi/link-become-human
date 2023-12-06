@@ -1,8 +1,9 @@
 import { ethers } from "hardhat";
 
 async function main() {
+  const subscriptionId = 836;
   const LinkBecomeHuman = await ethers.getContractFactory("LinkBecomeHuman");
-  const linkBecomeHuman = await LinkBecomeHuman.deploy();
+  const linkBecomeHuman = await LinkBecomeHuman.deploy(subscriptionId);
   await linkBecomeHuman.deployed();
   console.log(`LinkBecomeHuman deployed to ${linkBecomeHuman.address}`);
   // if (!process.env.SKIP_MINT) {

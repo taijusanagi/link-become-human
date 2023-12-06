@@ -4,10 +4,10 @@ import type { AppProps } from "next/app";
 
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { polygonMumbai } from "wagmi/chains";
+import { avalancheFuji } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 
-const { chains, publicClient } = configureChains([polygonMumbai], [publicProvider()]);
+const { chains, publicClient } = configureChains([avalancheFuji], [publicProvider()]);
 
 const { connectors } = getDefaultWallets({
   appName: "Link:BecomeHuman",

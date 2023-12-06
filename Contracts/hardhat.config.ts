@@ -14,6 +14,10 @@ const config: HardhatUserConfig = {
       url: "https://rpc.ankr.com/polygon_mumbai",
       accounts,
     },
+    fuji: {
+      url: "https://rpc.ankr.com/avalanche_fuji",
+      accounts,
+    },
   },
 };
 
