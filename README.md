@@ -28,10 +28,10 @@ https://functions.chain.link/fuji/1689
 
 https://automation.chain.link/fuji/57391455166369732876770238652550326632870463663968147696373284606771496952535
 
-## ENS Integration
-
-TBD
-
 ## The Graph Integration
+
+https://api.studio.thegraph.com/proxy/60667/linkbecomehuman/v0.0.1/graphql
+
+## ENS Integration
 
 TBD
