@@ -1,0 +1,48 @@
+specVersion: 0.0.5
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum
+    name: LinkBecomeHuman
+    network: fuji
+    source:
+      address: "0x98d80C7a5338fD211544f1f807D19F9191264Ce0"
+      abi: LinkBecomeHuman
+      startBlock: 28363342
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Approval
+        - ApprovalForAll
+        - HumanityScoreUpdated
+        - OwnershipTransferRequested
+        - OwnershipTransferred
+        - RequestFulfilled
+        - RequestSent
+        - SeedUpdated
+        - Transfer
+      abis:
+        - name: LinkBecomeHuman
+          file: LinkBecomeHuman/abis/LinkBecomeHuman.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: HumanityScoreUpdated(indexed uint256,string)
+          handler: handleHumanityScoreUpdated
+        - event: OwnershipTransferRequested(indexed address,indexed address)
+          handler: handleOwnershipTransferRequested
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: RequestFulfilled(indexed bytes32)
+          handler: handleRequestFulfilled
+        - event: RequestSent(indexed bytes32)
+          handler: handleRequestSent
+        - event: SeedUpdated(indexed uint256,uint256)
+          handler: handleSeedUpdated
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: LinkBecomeHuman/LinkBecomeHuman.wasm

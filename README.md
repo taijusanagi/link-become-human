@@ -1,5 +1,9 @@
 # Link: Become Human
 
+## Technical Detail
+
+![technical-detail](./Docs/technical-detail.png)
+
 ## Avalanche Integration
 
 ### Contract
