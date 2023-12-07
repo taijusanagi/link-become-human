@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
+using TMPro;
 
 [System.Serializable]
 public class TheGraphResponse
@@ -43,7 +44,10 @@ public class GameManager : MonoBehaviour
     public bool isMinted;
     public float humanityScore;
     public string seed;
-    
+
+    public TextMeshProUGUI isMintedText;
+    public TextMeshProUGUI humanityScoreText;
+    public TextMeshProUGUI seedText;    
 
     public Character character;
     public Accessory hat;
@@ -155,7 +159,7 @@ public class GameManager : MonoBehaviour
                     Debug.Log("Seed: " + seed);
                 } else {
                     Debug.Log("Seed is not fetched");
-                    seed = "";
+                    seed = "0";
                 }
             }
         }
@@ -163,6 +167,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        isMintedText.text = "Is Minted: " + isMinted;
+        humanityScoreText.text = "Humanity Score: " + humanityScore;
+        string displaySeed = seed.Length > 5 ? seed.Substring(0, 5) + "..." : seed;
+        seedText.text = "Seed: " + displaySeed;
         if(tokenId != "" && isMinted)
         {
             int state = Mathf.FloorToInt(humanityScore / 2.5f);
@@ -171,7 +179,7 @@ public class GameManager : MonoBehaviour
             {
                 character.ChangeState(state);
                 if(state == 8){
-                    if(seed != ""){
+                    if(seed != "0"){
                         byte[] bytes = BigInteger.Parse(seed, System.Globalization.NumberStyles.HexNumber).ToByteArray();
                         using (SHA256 sha256 = SHA256.Create())
                         {
