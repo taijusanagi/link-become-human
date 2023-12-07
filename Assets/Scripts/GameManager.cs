@@ -2,9 +2,40 @@ using System;
 using System.Numerics;
 using System.Security.Cryptography;
 using System.Collections;
-using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+
+[System.Serializable]
+public class TheGraphResponse
+{
+    public Data data;
+}
+
+[System.Serializable]
+public class Data
+{
+    public Transfer[] transfers;
+    public HumanityScoreUpdated[] humanityScoreUpdateds;
+    public SeedUpdated[] seedUpdateds;
+}
+
+[System.Serializable]
+public class Transfer
+{
+    public string tokenId;
+}
+
+[System.Serializable]
+public class HumanityScoreUpdated
+{
+    public string humanityScore;
+}
+
+[System.Serializable]
+public class SeedUpdated
+{
+    public string seed;
+}
 
 public class GameManager : MonoBehaviour
 {
@@ -63,11 +94,16 @@ public class GameManager : MonoBehaviour
     {
         string query = @"
         {
+        transfers(
+            where: {tokenId: """ + tokenId + @"""}
+        ) {
+            tokenId
+        }
         humanityScoreUpdateds(
             orderBy: blockNumber
             orderDirection: desc
             first: 1
-            where: {tokenId: ""1""}
+            where: {tokenId: """ + tokenId + @"""}
         ) {
             humanityScore
         }
@@ -75,7 +111,7 @@ public class GameManager : MonoBehaviour
             orderBy: blockNumber
             orderDirection: desc
             first: 1
-            where: {tokenId: ""1""}
+            where: {tokenId: """ + tokenId + @"""}
         ) {
             seed
         }
@@ -96,7 +132,31 @@ public class GameManager : MonoBehaviour
             else
             {
                 Debug.Log("Received: " + request.downloadHandler.text);
-                // Here you can handle the JSON response as needed
+                TheGraphResponse response = JsonUtility.FromJson<TheGraphResponse>(request.downloadHandler.text);
+                if (response.data.transfers.Length > 0)
+                {
+                    Debug.Log("Token id: " + tokenId + " is minted");
+                    isMinted = true;
+                } else {
+                    Debug.Log("Token id: " + tokenId + " is not minted");
+                    isMinted = false;
+                }
+                if (response.data.humanityScoreUpdateds.Length > 0)
+                {
+                    humanityScore = float.Parse(response.data.humanityScoreUpdateds[0].humanityScore);
+                    Debug.Log("Humanity Score: " + humanityScore);
+                } else {
+                    Debug.Log("Humanity Score is not fetched");
+                    humanityScore = 0;
+                }
+                if (response.data.seedUpdateds.Length > 0)
+                {
+                    seed = response.data.seedUpdateds[0].seed;
+                    Debug.Log("Seed: " + seed);
+                } else {
+                    Debug.Log("Seed is not fetched");
+                    seed = "";
+                }
             }
         }
     }
