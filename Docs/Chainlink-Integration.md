@@ -1,5 +1,8 @@
 # Chainlink Integration
 
+The details of Chainlink integration are maintained here.
+Primarily, this integration involves smart contracts. For a quick reference to the implementation, please refer to [here](../Contracts/contracts/LinkBecomeHuman.sol)
+
 ## Code
 
 ### Smart Contract with Chainlink Integration
@@ -13,6 +16,10 @@ The following modules are integrated into the dynamic NFT contract.
 - Chainlink VRF
 
 ## Reference
+
+### Diagram
+
+![technical-detail](./technical-detail.png)
 
 ### Deployed & Verified Contract on Avalanche
 
