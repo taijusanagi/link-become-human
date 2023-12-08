@@ -85,9 +85,13 @@ export default function Home() {
         </header>
         {!isConnected && (
           <div className="flex justify-center">
-            <div className="my-52 text-center">
+            <div className="my-52 text-center max-w-4xl">
               <img className="h-12 mx-auto animate-[up-and-down_1s_ease-in-out_infinite]" src="assets/icon.png" />
-              <h1 className="text-4xl md:text-7xl mb-4 flashing-text">Link:BecomeHuman</h1>
+              <h1 className="text-4xl md:text-7xl mb-2 flashing-text">Link:BecomeHuman</h1>
+              <p className="text-md mb-4 px-4">
+                Dynamic NFT that utilizes Chainlink VRF, Chainlink Functions, and Chainlink Automation. It leverages the
+                Gitcoin Passport&apos;s humanity score to show an android&apos;s transformation into a human in the NFT.
+              </p>
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 onClick={openConnectModal}
@@ -166,7 +170,7 @@ export default function Home() {
                     };
                     setModalTitle("Update Your Humanity Score");
                     setModalText(`
-                      This transaction uses the Chainlink Function to retrieve your humanity score from the Gitcoin Passport. 
+                      This transaction uses the Chainlink Functions to retrieve your humanity score from the Gitcoin Passport. 
                       Based on this score, the NFT character dynamically changes its state. 
                       This action will prompt you to confirm a transaction using AVAX.
                     `);
