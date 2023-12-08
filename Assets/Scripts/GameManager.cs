@@ -23,7 +23,9 @@ public class Data
 [System.Serializable]
 public class Transfer
 {
+    public string to;
     public string tokenId;
+
 }
 
 [System.Serializable]
@@ -41,10 +43,12 @@ public class SeedUpdated
 public class GameManager : MonoBehaviour
 {
     public string tokenId;
+    public string owner;
     public bool isMinted;
     public float humanityScore;
     public string seed;
 
+    public TextMeshProUGUI ownerText;
     public TextMeshProUGUI isMintedText;
     public TextMeshProUGUI humanityScoreText;
     public TextMeshProUGUI seedText;    
@@ -101,6 +105,7 @@ public class GameManager : MonoBehaviour
         transfers(
             where: {tokenId: """ + tokenId + @"""}
         ) {
+            to
             tokenId
         }
         humanityScoreUpdateds(
@@ -140,6 +145,7 @@ public class GameManager : MonoBehaviour
                 if (response.data.transfers.Length > 0)
                 {
                     Debug.Log("Token id: " + tokenId + " is minted");
+                    owner = response.data.transfers[0].to;
                     isMinted = true;
                 } else {
                     Debug.Log("Token id: " + tokenId + " is not minted");
@@ -167,10 +173,13 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        string displayOwner = owner.Length > 10 ? owner.Substring(0, 10) + "..." : owner;
+        ownerText.text = "Owner: " + displayOwner;
         isMintedText.text = "Is Minted: " + isMinted;
         humanityScoreText.text = "Humanity Score: " + humanityScore;
-        string displaySeed = seed.Length > 5 ? seed.Substring(0, 5) + "..." : seed;
+        string displaySeed = seed.Length > 11 ? seed.Substring(0, 11) + "..." : seed;
         seedText.text = "Seed: " + displaySeed;
+        
         if(tokenId != "" && isMinted)
         {
             int state = Mathf.FloorToInt(humanityScore / 2.5f);

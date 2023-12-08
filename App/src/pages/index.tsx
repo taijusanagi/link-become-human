@@ -16,14 +16,25 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState("Modal Title");
   const [modalText, setModalText] = useState("Modal Text");
+  const [modalFallback, setModalFallback] = useState<{ func?: Function }>({});
+  const [modalConfirmedTx, setModalConfirmedTx] = useState("");
+  const [modalConfirmedChainlink, setModalConfirmedChainlink] = useState("");
   const [tokenId, setTokenId] = useState("");
-  const [seed, setSeed] = useState("");
   const [isUpkeepNeeded, setIsUpkeepNeeded] = useState(false);
 
   const { openConnectModal } = useConnectModal();
   const { isConnected } = useIsConnected();
   const { address: userAddress } = useAccount();
   const { contract } = useContract();
+
+  const clearModal = () => {
+    setIsModalOpen(false);
+    setModalTitle("Modal Title");
+    setModalText("Modal Text");
+    setModalFallback({});
+    setModalConfirmedTx("");
+    setModalConfirmedChainlink("");
+  };
 
   useEffect(() => {
     if (!userAddress || !contract) {
@@ -51,16 +62,6 @@ export default function Home() {
         .catch(() => {
           console.log("token not yet minted");
         });
-      contract.seeds(tokenId).then((seed: ethers.BigNumber) => {
-        const _seed = seed.toString();
-        console.log("token seed", _seed);
-        setSeed(_seed);
-      });
-      contract.humanityScores(tokenId).then((humanityScore: ethers.BigNumber) => {
-        const _humanityScore = humanityScore.toString();
-        console.log("token humanity score", _humanityScore);
-        setSeed(_humanityScore);
-      });
       contract.isUpkeepNeeded(tokenId).then((isUpkeepNeeded: boolean) => {
         console.log("isUpkeepNeeded", isUpkeepNeeded);
         setIsUpkeepNeeded(isUpkeepNeeded);
@@ -69,6 +70,8 @@ export default function Home() {
     intervalFunction();
     const intervalId = setInterval(intervalFunction, 5000);
     return () => {
+      setIsMinted(false);
+      setIsUpkeepNeeded(false);
       clearInterval(intervalId);
     };
   }, [contract, tokenId]);
@@ -94,7 +97,7 @@ export default function Home() {
             </div>
           </div>
         )}
-        {isConnected && (
+        {isConnected && tokenId && (
           <div>
             <div className="flex justify-center my-8">
               <div>
@@ -119,7 +122,7 @@ export default function Home() {
                     </>
                   )}
                 </div>
-                <iframe width="504" height="504" src={`/game/index.html?tokenId=${tokenId}`}></iframe>
+                <iframe width="504" height="504" src={`/game/index.html?id=${tokenId}`}></iframe>
               </div>
             </div>
 
@@ -128,10 +131,20 @@ export default function Home() {
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   onClick={async () => {
-                    if (!contract) {
-                      return;
-                    }
-                    await contract.mint();
+                    const fallback = async () => {
+                      if (!contract) {
+                        return;
+                      }
+                      return await contract.mint();
+                    };
+                    setIsModalOpen(true);
+                    setModalTitle("Claim Your Humanity NFT");
+                    setModalText(`
+                      Are you certain you wish to claim your Humanity NFT? 
+                      The Humanity NFT is a non-transferable, dynamic NFT that utilizes the Gitcoin Passport humanity score, powered by Chainlink. 
+                      This action will prompt you to confirm a transaction using AVAX.
+                    `);
+                    setModalFallback({ func: fallback });
                   }}
                 >
                   Claim Your Humanity NFT
@@ -184,7 +197,7 @@ export default function Home() {
                     if (!contract) {
                       return;
                     }
-                    await contract.requestRandomness(tokenId);
+                    return await contract.requestRandomness(tokenId);
                   }}
                 >
                   Randomize Seed
@@ -197,15 +210,64 @@ export default function Home() {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-2 text-gray-800">
-          <div className="absolute inset-0 bg-black opacity-50" onClick={() => setIsModalOpen(false)}></div>
+          <div className="absolute inset-0 bg-black opacity-50" onClick={clearModal}></div>
           <div className="relative z-10 bg-white py-4 px-6 rounded-xl shadow-lg max-w-xl w-full mx-4">
-            <header className="flex justify-between items-center mb-2">
+            <header className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">{modalTitle}</h2>
-              <button onClick={() => setIsModalOpen(false)} className="text-xl text-gray-400 hover:text-gray-500">
+              <button onClick={clearModal} className="text-xl text-gray-400 hover:text-gray-500">
                 &times;
               </button>
             </header>
-            <p>{modalText}</p>
+            <div className="mb-8">
+              <p className="mb-4">{modalText}</p>
+              {modalConfirmedTx && (
+                <p>
+                  Avalanche Exproler:{" "}
+                  <a
+                    href={`https://testnet.snowtrace.io/tx/${modalConfirmedTx}`}
+                    target="_blank"
+                    className="text-blue-500 hover:underline"
+                  >
+                    {modalConfirmedTx}
+                  </a>
+                </p>
+              )}
+              {modalConfirmedChainlink && (
+                <p>
+                  <a
+                    href={`https://testnets.opensea.io/assets/avalanche-fuji/${contractAddress}/${tokenId}`}
+                    target="_blank"
+                    className="text-blue-500 hover:underline"
+                  >
+                    Chainlink Exproler: {modalConfirmedTx}
+                  </a>
+                </p>
+              )}
+            </div>
+            <div className="text-right">
+              {!modalConfirmedTx && (
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={async () => {
+                    if (!modalFallback.func) {
+                      return;
+                    }
+                    const { hash } = await modalFallback.func();
+                    setModalConfirmedTx(hash);
+                  }}
+                >
+                  Confirm
+                </button>
+              )}
+              {modalConfirmedTx && (
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={clearModal}
+                >
+                  Close
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}
