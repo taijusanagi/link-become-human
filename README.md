@@ -35,6 +35,13 @@ The details of Chainlink integration are maintained [here](./Docs/Chainlink-Inte
 - Unity fetches data from The Graph and updates the state dynamically.
 - The web app and Opensea display the same dynamic NFT using an iframe.
 
+### Dynamic State in NFT
+
+![dynamic](./Docs/dynamic.png)
+
+- The humanity score affects the growth of the android.
+- The random seed value affects accessories like hats and eyeglasses.
+
 ## Avalanche Integration
 
 The dynamic NFT is deployed Avalanche C-Chain Fuji Testnet.
