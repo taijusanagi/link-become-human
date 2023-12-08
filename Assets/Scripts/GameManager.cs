@@ -61,6 +61,7 @@ public class Domain
 
 public class GameManager : MonoBehaviour
 {
+    public bool stopDataFetchForDebug;
     public string tokenId;
     public string owner;
     public string ens;
@@ -108,7 +109,7 @@ public class GameManager : MonoBehaviour
     void RepeatedFetch()
     {
         Debug.Log("RepeatedFetch");
-        if (!string.IsNullOrEmpty(tokenId))
+        if (!string.IsNullOrEmpty(tokenId) && !stopDataFetchForDebug)
         {
             Debug.Log("Fetching data for token id: " + tokenId);
             StartCoroutine(GetDataFromTheGraph());

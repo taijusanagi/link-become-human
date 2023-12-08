@@ -10,7 +10,7 @@ https://link-become-human.vercel.app/
 
 ## Demo Video
 
-TBD
+https://youtu.be/bzFmTV1zfTk
 
 ## Technical Detail
 
@@ -26,11 +26,11 @@ The details of Chainlink integration are maintained [here](./Docs/Chainlink-Inte
 
 ## Avalanche Integration
 
-### Contract
+The dynamic NFT is deployed Avalanche C-Chain Fuji Testnet.
 
 https://testnet.snowtrace.io/address/0x98d80C7a5338fD211544f1f807D19F9191264Ce0#code-43113
 
-### OpenSea
+Opensea supports Avalanche C-Chain Fuji Testnet and the asset page is here.
 
 https://testnets.opensea.io/assets/avalanche-fuji/0x98d80C7a5338fD211544f1f807D19F9191264Ce0/1098112484341563293955512077999730492067707
 
@@ -46,4 +46,7 @@ The following subgraphs are integrated.
 
 ## ENS Integration
 
-TBD
+- The ENS name is fetched by The Graph and displayed in the dynamic NFT.
+- The ENS avatar is fetched by Rainbow Kit SDK.
+
+![ui](./Docs/ui.png)
