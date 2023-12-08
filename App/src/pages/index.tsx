@@ -14,8 +14,8 @@ import { ethers } from "ethers";
 export default function Home() {
   const [isMinted, setIsMinted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState("Modal Title");
-  const [modalText, setModalText] = useState("Modal Text");
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalText, setModalText] = useState("");
   const [modalFallback, setModalFallback] = useState<{ func?: Function }>({});
   const [modalConfirmedTx, setModalConfirmedTx] = useState("");
   const [modalConfirmedChainlink, setModalConfirmedChainlink] = useState("");
@@ -29,8 +29,8 @@ export default function Home() {
 
   const clearModal = () => {
     setIsModalOpen(false);
-    setModalTitle("Modal Title");
-    setModalText("Modal Text");
+    setModalTitle("");
+    setModalText("");
     setModalFallback({});
     setModalConfirmedTx("");
     setModalConfirmedChainlink("");
@@ -137,7 +137,6 @@ export default function Home() {
                       }
                       return await contract.mint();
                     };
-                    setIsModalOpen(true);
                     setModalTitle("Claim Your Humanity NFT");
                     setModalText(`
                       Are you certain you wish to claim your Humanity NFT? 
@@ -145,6 +144,7 @@ export default function Home() {
                       This action will prompt you to confirm a transaction using AVAX.
                     `);
                     setModalFallback({ func: fallback });
+                    setIsModalOpen(true);
                   }}
                 >
                   Claim Your Humanity NFT

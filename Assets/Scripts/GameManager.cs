@@ -40,16 +40,35 @@ public class SeedUpdated
     public string seed;
 }
 
+[System.Serializable]
+public class ENSResponse
+{
+    public ENSData data;
+}
+
+[System.Serializable]
+public class ENSData
+{
+    public Domain[] domains;
+}
+
+[System.Serializable]
+public class Domain
+{
+    public string labelName;
+}
+
+
 public class GameManager : MonoBehaviour
 {
     public string tokenId;
     public string owner;
+    public string ens;
     public bool isMinted;
     public float humanityScore;
     public string seed;
 
     public TextMeshProUGUI ownerText;
-    public TextMeshProUGUI isMintedText;
     public TextMeshProUGUI humanityScoreText;
     public TextMeshProUGUI seedText;    
 
@@ -58,6 +77,8 @@ public class GameManager : MonoBehaviour
     public Accessory eyeglass;
 
     private readonly string endpointURL = "https://api.studio.thegraph.com/query/60667/linkbecomehuman/v0.0.1";
+    private readonly string ensURL = "https://api.thegraph.com/subgraphs/name/ensdomains/ens";
+
     private float interval = 5f;
 
     // get token id from url
@@ -102,28 +123,28 @@ public class GameManager : MonoBehaviour
     {
         string query = @"
         {
-        transfers(
-            where: {tokenId: """ + tokenId + @"""}
-        ) {
-            to
-            tokenId
-        }
-        humanityScoreUpdateds(
-            orderBy: blockNumber
-            orderDirection: desc
-            first: 1
-            where: {tokenId: """ + tokenId + @"""}
-        ) {
-            humanityScore
-        }
-        seedUpdateds(
-            orderBy: blockNumber
-            orderDirection: desc
-            first: 1
-            where: {tokenId: """ + tokenId + @"""}
-        ) {
-            seed
-        }
+            transfers(
+                where: {tokenId: """ + tokenId + @"""}
+            ) {
+                to
+                tokenId
+            }
+            humanityScoreUpdateds(
+                orderBy: blockNumber
+                orderDirection: desc
+                first: 1
+                where: {tokenId: """ + tokenId + @"""}
+            ) {
+                humanityScore
+            }
+            seedUpdateds(
+                orderBy: blockNumber
+                orderDirection: desc
+                first: 1
+                where: {tokenId: """ + tokenId + @"""}
+            ) {
+                seed
+            }
         }";
         string jsonData = "{\"query\":\"" + query.Replace("\n", " ").Replace("\"", "\\\"") + "\"}";
         Debug.Log("jsonData:" + jsonData);
@@ -147,6 +168,7 @@ public class GameManager : MonoBehaviour
                     Debug.Log("Token id: " + tokenId + " is minted");
                     owner = response.data.transfers[0].to;
                     isMinted = true;
+                    StartCoroutine(GetNameFromTheGraph());
                 } else {
                     Debug.Log("Token id: " + tokenId + " is not minted");
                     isMinted = false;
@@ -171,13 +193,58 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    IEnumerator GetNameFromTheGraph() {
+        string query = @"
+        {
+            domains(
+                where: {owner_: {id: """ + owner + @"""}, labelName_not: ""null""}
+            ) {
+                labelName
+            }
+        }";
+        string jsonData = "{\"query\":\"" + query.Replace("\n", " ").Replace("\"", "\\\"") + "\"}";
+        Debug.Log("jsonData:" + jsonData);
+        using (UnityWebRequest request = new UnityWebRequest(ensURL, "POST")) 
+        {
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+            request.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
+            request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            yield return request.SendWebRequest();
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Error: " + request.error);
+            }
+            else
+            { 
+                Debug.Log("Received: " + request.downloadHandler.text);     
+                ENSResponse response = JsonUtility.FromJson<ENSResponse>(request.downloadHandler.text);
+                if (response.data.domains.Length > 0)
+                {
+                    string _ens = response.data.domains[0].labelName + ".eth";
+                    Debug.Log("ENS: " + _ens);
+                    ens = _ens;
+                } else {
+                    Debug.Log("ENS is not set");
+                }
+            }
+        }
+    }
+
     void Update()
     {
-        string displayOwner = owner.Length > 10 ? owner.Substring(0, 10) + "..." : owner;
-        ownerText.text = "Owner: " + displayOwner;
-        isMintedText.text = "Is Minted: " + isMinted;
+        if(ens != "")
+        {
+            string displayEns = ens.Length > 12 ? ens.Substring(0, 12) + "..." : ens;
+            ownerText.text = "Owner: " + displayEns;
+        }
+        else
+        {
+            string displayOwner = owner.Length > 10 ? owner.Substring(0, 10) + "..." : owner;
+            ownerText.text = "Owner: " + displayOwner;
+        }
         humanityScoreText.text = "Humanity Score: " + humanityScore;
-        string displaySeed = seed.Length > 11 ? seed.Substring(0, 11) + "..." : seed;
+        string displaySeed = seed.Length > 13 ? seed.Substring(0, 13) + "..." : seed;
         seedText.text = "Seed: " + displaySeed;
         
         if(tokenId != "" && isMinted)
