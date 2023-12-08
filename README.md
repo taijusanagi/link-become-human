@@ -1,5 +1,7 @@
 # Link: Become Human
 
+![ui](./Docs/ui.png)
+
 ## Technical Detail
 
 ![technical-detail](./Docs/technical-detail.png)
@@ -16,10 +18,6 @@ https://testnets.opensea.io/assets/avalanche-fuji/0x98d80C7a5338fD211544f1f807D1
 
 ## Chainlink Integration
 
-### Chainlink VRF
-
-https://vrf.chain.link/fuji/836
-
 ### Chainlink Function
 
 https://functions.chain.link/fuji/1689
@@ -27,6 +25,10 @@ https://functions.chain.link/fuji/1689
 ### Chainlink Automation
 
 https://automation.chain.link/fuji/57391455166369732876770238652550326632870463663968147696373284606771496952535
+
+### Chainlink VRF
+
+https://vrf.chain.link/fuji/836
 
 ## The Graph Integration
 

@@ -135,11 +135,11 @@ export default function Home() {
                       if (!contract) {
                         return;
                       }
-                      return await contract.mint();
+                      const { hash } = await contract.mint();
+                      return { hash };
                     };
                     setModalTitle("Claim Your Humanity NFT");
                     setModalText(`
-                      Are you certain you wish to claim your Humanity NFT? 
                       The Humanity NFT is a non-transferable, dynamic NFT that utilizes the Gitcoin Passport humanity score, powered by Chainlink. 
                       This action will prompt you to confirm a transaction using AVAX.
                     `);
@@ -157,10 +157,21 @@ export default function Home() {
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   onClick={async () => {
-                    if (!contract) {
-                      return;
-                    }
-                    await contract.sendRequest(tokenId);
+                    const fallback = async () => {
+                      if (!contract) {
+                        return;
+                      }
+                      const { hash } = await contract.sendRequest(tokenId);
+                      return { hash, chainlink: "https://functions.chain.link/fuji/1689" };
+                    };
+                    setModalTitle("Update Your Humanity Score");
+                    setModalText(`
+                      This transaction uses the Chainlink Function to retrieve your humanity score from the Gitcoin Passport. 
+                      Based on this score, the NFT character dynamically changes its state. 
+                      This action will prompt you to confirm a transaction using AVAX.
+                    `);
+                    setModalFallback({ func: fallback });
+                    setIsModalOpen(true);
                   }}
                 >
                   Update Humanity
@@ -169,10 +180,25 @@ export default function Home() {
                   <button
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     onClick={async () => {
-                      if (!contract) {
-                        return;
-                      }
-                      await contract.setUpkeep(tokenId, true);
+                      const fallback = async () => {
+                        if (!contract) {
+                          return;
+                        }
+                        const { hash } = await contract.setUpkeep(tokenId, true);
+                        return {
+                          hash,
+                          chainlink:
+                            "https://automation.chain.link/fuji/57391455166369732876770238652550326632870463663968147696373284606771496952535",
+                        };
+                      };
+                      setModalTitle("Start Automate Humanity Update");
+                      setModalText(`
+                      This transaction utilizes Chainlink Automation to automatically retrieve the humanity score every 5 minutes.
+                      While anyone can initiate the automation for a demo currently, please ensure to stop it after trying.
+                      This action will prompt you to confirm a transaction using AVAX.
+                    `);
+                      setModalFallback({ func: fallback });
+                      setIsModalOpen(true);
                     }}
                   >
                     Start Automate
@@ -194,10 +220,20 @@ export default function Home() {
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   onClick={async () => {
-                    if (!contract) {
-                      return;
-                    }
-                    return await contract.requestRandomness(tokenId);
+                    const fallback = async () => {
+                      if (!contract) {
+                        return;
+                      }
+                      const { hash } = await contract.requestRandomness(tokenId);
+                      return { hash, chainlink: "https://vrf.chain.link/fuji/836" };
+                    };
+                    setModalTitle("Randomize Your Dynamic NFT");
+                    setModalText(`
+                      This transaction employs Chainlink VRF to fetch a random seed value, and your NFT dynamically changes states, including its hat and eyeglasses. 
+                      This action will prompt you to confirm a transaction using AVAX.
+                    `);
+                    setModalFallback({ func: fallback });
+                    setIsModalOpen(true);
                   }}
                 >
                   Randomize Seed
@@ -221,27 +257,28 @@ export default function Home() {
             <div className="mb-8">
               <p className="mb-4">{modalText}</p>
               {modalConfirmedTx && (
-                <p>
-                  Avalanche Exproler:{" "}
-                  <a
-                    href={`https://testnet.snowtrace.io/tx/${modalConfirmedTx}`}
-                    target="_blank"
-                    className="text-blue-500 hover:underline"
-                  >
-                    {modalConfirmedTx}
-                  </a>
-                </p>
+                <>
+                  <p>Avalanche Exproler:</p>
+                  <p>
+                    <a
+                      href={`https://testnet.snowtrace.io/tx/${modalConfirmedTx}`}
+                      target="_blank"
+                      className="text-blue-500 hover:underline"
+                    >
+                      {modalConfirmedTx}
+                    </a>
+                  </p>
+                </>
               )}
               {modalConfirmedChainlink && (
-                <p>
-                  <a
-                    href={`https://testnets.opensea.io/assets/avalanche-fuji/${contractAddress}/${tokenId}`}
-                    target="_blank"
-                    className="text-blue-500 hover:underline"
-                  >
-                    Chainlink Exproler: {modalConfirmedTx}
-                  </a>
-                </p>
+                <>
+                  <p className="mt-2">Chainlink Exproler:</p>
+                  <p className="break-all">
+                    <a href={`${modalConfirmedChainlink}`} target="_blank" className="text-blue-500 hover:underline">
+                      {modalConfirmedChainlink}
+                    </a>
+                  </p>
+                </>
               )}
             </div>
             <div className="text-right">
@@ -252,8 +289,13 @@ export default function Home() {
                     if (!modalFallback.func) {
                       return;
                     }
-                    const { hash } = await modalFallback.func();
-                    setModalConfirmedTx(hash);
+                    const { hash, chainlink } = await modalFallback.func();
+                    if (hash) {
+                      setModalConfirmedTx(hash);
+                    }
+                    if (chainlink) {
+                      setModalConfirmedChainlink(chainlink);
+                    }
                   }}
                 >
                   Confirm
