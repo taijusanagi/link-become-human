@@ -240,7 +240,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            string displayOwner = owner.Length > 10 ? owner.Substring(0, 10) + "..." : owner;
+            string displayOwner = owner.Length > 12 ? owner.Substring(0, 12) + "..." : owner;
             ownerText.text = "Owner: " + displayOwner;
         }
         humanityScoreText.text = "Humanity Score: " + humanityScore;
