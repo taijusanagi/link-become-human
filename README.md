@@ -8,15 +8,21 @@ Dynamic NFT that utilizes Chainlink VRF, Chainlink Functions, and Chainlink Auto
 
 https://link-become-human.vercel.app/
 
+## Demo Video
+
+TBD
+
 ## Technical Detail
 
-### Data Integration with Chainlink
+### Data Integration Diagram
 
 ![technical-detail](./Docs/technical-detail.png)
 
 The details of Chainlink integration are maintained [here](./Docs/Chainlink-Integration.md).
 
 ### NFT Rendering with Unity and The Graph
+
+TBD
 
 ## Avalanche Integration
 
@@ -30,7 +36,13 @@ https://testnets.opensea.io/assets/avalanche-fuji/0x98d80C7a5338fD211544f1f807D1
 
 ## The Graph Integration
 
-https://api.studio.thegraph.com/proxy/60667/linkbecomehuman/v0.0.1/graphql
+The Graph is used in Unity C# Script.
+https://github.com/taijusanagi/link-become-human/blob/main/Assets/Scripts/GameManager.cs#L122
+
+The following subgraphs are integrated.
+
+- https://api.studio.thegraph.com/proxy/60667/linkbecomehuman/v0.0.1/graphql (New)
+- https://api.thegraph.com/subgraphs/name/ensdomains/ens/graphql (Existing one for ENS)
 
 ## ENS Integration
 

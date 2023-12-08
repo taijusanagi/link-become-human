@@ -1,6 +1,6 @@
 # Chainlink Integration
 
-The details of Chainlink integration are maintained here. Primarily, this integration involves smart contracts. For a quick reference to the implementation, please refer to [here](../Contracts/contracts/LinkBecomeHuman.sol)
+The details of Chainlink integration are maintained here. Primarily, this integration involves smart contracts. For a quick reference to the implementation, please refer to [here](../Contracts/contracts/LinkBecomeHuman.sol).
 
 ## Code
 
