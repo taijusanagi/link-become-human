@@ -14,7 +14,7 @@ https://link-become-human.vercel.app/
 
 ![technical-detail](./Docs/technical-detail.png)
 
-Chainlink integration detail is kept [here](./Docs/Chainlink-Integration.md).
+The details of Chainlink integration are maintained [here](./Docs/Chainlink-Integration.md).
 
 ### NFT Rendering with Unity and The Graph
 
