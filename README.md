@@ -20,9 +20,9 @@ TBD
 
 The details of Chainlink integration are maintained [here](./Docs/Chainlink-Integration.md).
 
-### NFT Rendering with Unity and The Graph
+### Dynamic NFT with Unity
 
-TBD
+![dynamic-nft](./Docs/dynamic-nft.png)
 
 ## Avalanche Integration
 
@@ -36,7 +36,7 @@ https://testnets.opensea.io/assets/avalanche-fuji/0x98d80C7a5338fD211544f1f807D1
 
 ## The Graph Integration
 
-The Graph is used in Unity C# Script.
+The Graph is used in a Unity C# script for data aggregation.
 https://github.com/taijusanagi/link-become-human/blob/main/Assets/Scripts/GameManager.cs#L122
 
 The following subgraphs are integrated.
