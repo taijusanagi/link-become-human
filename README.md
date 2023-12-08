@@ -35,7 +35,7 @@ The details of Chainlink integration are maintained [here](./Docs/Chainlink-Inte
 - Unity fetches data from The Graph and updates the state dynamically.
 - The web app and Opensea display the same dynamic NFT using an iframe.
 
-### Dynamic State in NFT
+### Dynamic NFT State Management
 
 ![dynamic](./Docs/dynamic.png)
 
