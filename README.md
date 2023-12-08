@@ -20,9 +20,20 @@ https://youtu.be/bzFmTV1zfTk
 
 The details of Chainlink integration are maintained [here](./Docs/Chainlink-Integration.md).
 
+- Gitcoin Passport as a source for humanity scores.
+- Chainlink Functions for integrating humanity scores into NFT smart contracts.
+- Chainlink Automation to automate the data fetching process.
+- Chainlink VRF for generating random seed values.
+- The Graph for data aggregation purposes.
+- ENS for managing identity data, such as names and avatars.
+
 ### Dynamic NFT with Unity
 
 ![dynamic-nft](./Docs/dynamic-nft.png)
+
+- Dynamic NFTs are rendered using Unity and WebGL.
+- Unity fetches data from The Graph and updates the state dynamically.
+- The web app and Opensea display the same dynamic NFT using an iframe.
 
 ## Avalanche Integration
 
