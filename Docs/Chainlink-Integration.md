@@ -14,6 +14,12 @@ The dynamic NFT contract incorporates the following Chainlink modules.
 - Chainlink Automation
 - Chainlink VRF
 
+### Chainlink Funcions Endpoint
+
+Chainlink Functions connects https://link-become-human.vercel.app/api/humanity/${address} this internal endpoint for simplicity. This endpoint is implemented here.
+
+https://github.com/taijusanagi/link-become-human/blob/main/App/src/pages/api/humanity/%5Baddress%5D.ts
+
 ## Reference
 
 ### Diagram
