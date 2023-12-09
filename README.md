@@ -14,6 +14,21 @@ https://youtu.be/bzFmTV1zfTk
 
 ## Technical Detail
 
+### Dynamic NFT State
+
+![dynamic](./Docs/dynamic.png)
+
+- The humanity score affects the growth of the android.
+- The random seed value affects accessories like hats and eyeglasses.
+
+### Unity for Dynamic NFT
+
+![dynamic-nft](./Docs/dynamic-nft.png)
+
+- Dynamic NFTs are rendered using Unity and WebGL.
+- Unity fetches data from The Graph and updates the state dynamically.
+- The web app and Opensea display the same dynamic NFT using an iframe.
+
 ### Data Integration Diagram
 
 ![technical-detail](./Docs/technical-detail.png)
@@ -26,21 +41,6 @@ The details of Chainlink integration are maintained [here](./Docs/Chainlink-Inte
 - Chainlink VRF for generating random seed values.
 - The Graph for data aggregation purposes.
 - ENS for managing identity data, such as names and avatars.
-
-### Dynamic NFT with Unity
-
-![dynamic-nft](./Docs/dynamic-nft.png)
-
-- Dynamic NFTs are rendered using Unity and WebGL.
-- Unity fetches data from The Graph and updates the state dynamically.
-- The web app and Opensea display the same dynamic NFT using an iframe.
-
-### Dynamic NFT State Management
-
-![dynamic](./Docs/dynamic.png)
-
-- The humanity score affects the growth of the android.
-- The random seed value affects accessories like hats and eyeglasses.
 
 ## Avalanche Integration
 
